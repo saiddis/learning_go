@@ -2,25 +2,20 @@ package trafficlight
 
 import (
 	"fmt"
-	"os"
 )
 
 func TrafficLight() {
-	if len(os.Args) < 2 {
-		fmt.Println(`Please provide a traffic light color:
-		red, yellow, green`)
-		return
-	}
-
-	lightColor := os.Args[1]
+	var lightColor string
+	fmt.Print(`Type the traffic light color: red, yellow, green 
+>>> `)
+	fmt.Scan(&lightColor)
 	printTrafficLight(lightColor)
 }
 
 func printTrafficLight(lightColor string) {
 	switch lightColor {
 	default:
-		fmt.Println(`Please provide a traffic light color:
-		red, yellow, green`)
+		fmt.Println(`Error: given traffic light or input type is not valid`)
 	case "red":
 		fmt.Println("Stop")
 	case "yellow":

@@ -2,23 +2,14 @@ package temperature
 
 import (
 	"fmt"
-	"os"
-	"strconv"
 )
 
 func TemperatureDescription() {
-	if len(os.Args) < 2 {
-		fmt.Println(`Please provide a degree`)
-		return
-	}
-
-	temperature := os.Args[1]
-	intTemperature, err := strconv.Atoi(temperature)
-	if err != nil {
-		fmt.Println("Error")
-	}
-
-	fmt.Println(getTemperatureDescription(intTemperature))
+	var temperature int
+	fmt.Print(`Type the temperature 
+>>> `)
+	fmt.Scan(&temperature)
+	fmt.Println(getTemperatureDescription(temperature))
 }
 
 func getTemperatureDescription(temperature int) string {
@@ -26,7 +17,9 @@ func getTemperatureDescription(temperature int) string {
 		return "Cold"
 	} else if temperature >= 10 && temperature <= 25 {
 		return "Warm"
-	} else {
+	} else if temperature > 25 {
 		return "Hot"
+	} else {
+		return "Error: given degree or input type is not valid"
 	}
 }

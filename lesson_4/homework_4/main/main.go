@@ -1,13 +1,19 @@
 package main
 
 import (
+	"discount"
+	"grade"
 	"greeting"
+	"temperature"
+	"trafficlight"
+	"weather"
 )
 
 func main() {
 	greeting.Greeting()
-	/* trafficlight.TrafficLight()
-	grade.Grage()
 	discount.Discount()
-	temperature.TemperatureDescription() */
+	trafficlight.TrafficLight()
+	temperature.TemperatureDescription()
+	grade.Grade()
+	weather.Weather()
 }

@@ -2,24 +2,14 @@ package grade
 
 import (
 	"fmt"
-	"os"
-	"strconv"
 )
 
-func Grage() {
-	if len(os.Args) < 2 {
-		fmt.Println(`Please provide a score number:
-		0-100`)
-		return
-	}
-
-	score := os.Args[1]
-	intScore, err := strconv.Atoi(score)
-	if err != nil {
-		fmt.Println("Error")
-	}
-
-	fmt.Println(getGrade(intScore))
+func Grade() {
+	var score int
+	fmt.Print(`Type the score number: 0-100 
+>>> `)
+	fmt.Scan(&score)
+	fmt.Println("Your grade:", getGrade(score))
 }
 
 func getGrade(score int) string {
@@ -30,7 +20,6 @@ func getGrade(score int) string {
 	} else if score > 70 && score < 101 {
 		return "A"
 	} else {
-		return `Please provide a score number:
-		0-100`
+		return `Error: given score or input type is not valid`
 	}
 }

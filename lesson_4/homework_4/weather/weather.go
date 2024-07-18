@@ -2,25 +2,20 @@ package weather
 
 import (
 	"fmt"
-	"os"
 )
 
 func Weather() {
-	if len(os.Args) < 2 {
-		fmt.Println(`Please provide a weather type:
-		sunny, clody, rainy`)
-		return
-	}
-
-	weatherType := os.Args[1]
+	var weatherType string
+	fmt.Print(`Type the weather: sunny, clody, rainy 
+>>> `)
+	fmt.Scan(&weatherType)
 	printWeather(weatherType)
 }
 
 func printWeather(weatherType string) {
 	switch weatherType {
 	default:
-		fmt.Println(`Please provide a weather type:
-		sunny, clody, rainy`)
+		fmt.Println(`Error: given weather or input type is not valid`)
 	case "sunny":
 		fmt.Println("Sunny")
 	case "cloudy":

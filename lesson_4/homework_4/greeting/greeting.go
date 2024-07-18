@@ -2,25 +2,20 @@ package greeting
 
 import (
 	"fmt"
-	"os"
 )
 
 func Greeting() {
-	if len(os.Args) < 2 {
-		fmt.Println(`Please provide a day type:
-		morning, noon, evening`)
-		return
-	}
-
-	dayType := os.Args[1]
+	var dayType string
+	fmt.Print(`Type the daytime: morning, noon, evening
+>>> `)
+	fmt.Scan(&dayType)
 	printGreeting(dayType)
 }
 
 func printGreeting(dayType string) {
 	switch dayType {
 	default:
-		fmt.Println(`Please provide a day type:
-		morning, noon, evening`)
+		fmt.Println(`Error: given daytime or input type is not valid`)
 	case "morning":
 		fmt.Println("Good morning!")
 	case "noon":
