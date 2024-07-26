@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 )
 
 func main() {
@@ -74,8 +75,18 @@ func main() {
 	displayVehicleData(vehicle)
 
 	fmt.Println("---checkTransactions([]bool) bool)---")
-	var trans = []float64{23.43, 323.45, 7745}
+	var tr1, tr2, tr3 Transaction = makeTransaction, makeTransaction, makeTransaction
+	var trans = []Transaction{tr1, tr2, tr3}
 	fmt.Println(checkTransactions(trans))
+
+	fmt.Println("---displayItemData(Item)---")
+	var inventoryID InventoryID = 2345
+	var item = Item{
+		inventoryID,
+		"Laptop",
+		"High",
+	}
+	displayItemData(item)
 
 	fmt.Println("---displayBookData(Book)---")
 	book := Book{
@@ -84,6 +95,126 @@ func main() {
 		434,
 	}
 	displayBookData(book)
+
+	fmt.Println("---updateProductData(Product)---")
+	var product = Product{
+		"Apple",
+		56,
+	}
+	updateProductData(&product)
+
+	fmt.Println("---printStudentNames(Student)---")
+	student1 := &Student{Name: "Umar"}
+	student2 := &Student{Name: "Akbar"}
+	student3 := &Student{Name: "Said"}
+	student1.Next = student2
+	student2.Next = student3
+	printStudentNames(*student1)
+
+	fmt.Println("---Event---")
+	fmt.Println("Event name:", birthday.EventName)
+	fmt.Println("Location:", birthday.Location)
+
+	fmt.Println("---getStudent2Data(Student2) (int, string, []float64)---")
+	st1 := Student2{
+		34234,
+		"Said",
+		[]float64{4, 5, 3, 5, 4},
+	}
+	st2 := Student2{
+		4543,
+		"Umar",
+		[]float64{4, 2, 5, 3, 3},
+	}
+	st3 := Student2{
+		3324,
+		"Muin",
+		[]float64{5, 5, 5, 5, 4},
+	}
+	printStudent2Data(st1)
+	printStudent2Data(st2)
+	printStudent2Data(st3)
+	students := []Student2{st1, st2, st3}
+	fmt.Println("---getTheBestStudent([]Student2) Student2---")
+	fmt.Println(getTheBestStudent(students))
+}
+
+type Student2 struct {
+	ID     int
+	Name   string
+	Grades []float64
+}
+
+func printStudent2Data(st Student2) {
+	fmt.Println("ID:", st.ID)
+	fmt.Println("Name:", st.Name)
+	fmt.Println("Grades:", st.Grades)
+}
+
+func getTheBestStudent(students []Student2) Student2 {
+	var sortedStudentsIndexesByGrades []int
+	for i := len(students) - 1; i > 0; i-- {
+		sortedStudentsIndexesByGrades =
+			append(sortedStudentsIndexesByGrades, compareStudentsGrades(students[i], students[i-1])+i)
+	}
+
+	return students[sortedStudentsIndexesByGrades[0]]
+}
+
+func compareStudentsGrades(st1, st2 Student2) int {
+	st1AG := getAverageGrade(st1.Grades)
+	st2AG := getAverageGrade(st2.Grades)
+
+	if st1AG > st2AG {
+		return 0
+	}
+
+	return -1
+}
+
+func getAverageGrade(grades []float64) float64 {
+	var sum float64
+	for _, v := range grades {
+		sum += v
+	}
+
+	return sum / float64(len(grades))
+}
+
+var birthday = struct {
+	EventName string
+	Location  string
+}{
+	EventName: "birthday",
+	Location:  "home",
+}
+
+type Student struct {
+	Name string
+	Next *Student
+}
+
+func printStudentNames(student Student) {
+	fmt.Println(student.Name)
+	if student.Next != nil {
+		printStudentNames(*student.Next)
+	}
+}
+
+type Product struct {
+	Name  string
+	Stock int
+}
+
+func updateProductData(p *Product) {
+	if p.Stock < 100 {
+		*&p.Stock += 200
+		fmt.Printf("Updated %v amount: %d \n", p.Name, p.Stock)
+		return
+	}
+
+	fmt.Printf("The %v amount is enough \n", p.Name)
+
 }
 
 type Book struct {
@@ -96,25 +227,34 @@ func displayBookData(book Book) {
 	fmt.Printf("'%v' has %d pages \n", book.Title, book.Pages)
 }
 
-type InventoryID = int
-
-type Transaction = func(float64) bool
-
-func makeTransaction(amount float64) bool {
-	var tr Transaction = func(amount float64) bool {
-		if amount > float64(0) {
-			return true
-		}
-
-		return false
-	}
-
-	return tr(amount)
+type InventoryID int
+type Item struct {
+	ID      InventoryID
+	Name    string
+	Quality string
 }
 
-func checkTransactions(trans []float64) bool {
+func displayItemData(item Item) {
+	fmt.Println("ID:", item.ID)
+	fmt.Println("Name:", item.Name)
+	fmt.Println("Quality:", item.Quality)
+}
+
+type Transaction func(float64, float64) bool
+
+func makeTransaction(balance, price float64) bool {
+	if balance > price {
+		return true
+	}
+	return false
+}
+
+func checkTransactions(trans []Transaction) bool {
+	var balance, price float64
 	for _, v := range trans {
-		if makeTransaction(v) {
+		balance = rand.Float64() * float64(rand.Intn(1000))
+		price = rand.Float64() * float64(rand.Intn(100))
+		if v(balance, price) {
 			return true
 		}
 	}
