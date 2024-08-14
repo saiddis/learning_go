@@ -1,0 +1,3 @@
+hello
+up
+m console
